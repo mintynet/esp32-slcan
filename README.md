@@ -4,3 +4,5 @@ This repository has an arduino sketch to create a slcan USB/Bluetooth device usi
 <br><br>https://github.com/nhatuan84/arduino-esp32-can-demo
 <br>Adafruit_GFX
 <br>Adafruit_SSD1306
+
+Schematic for the device to follow
