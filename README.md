@@ -5,4 +5,5 @@ This repository has an arduino sketch to create a slcan USB/Bluetooth device usi
 <br>Adafruit_GFX
 <br>Adafruit_SSD1306
 
+Current "ESP32 ESP-WROOM-32 Wemos D1" uses CP2102 USB to TTL which is limited to 500kbps
 Schematic for the device to follow
