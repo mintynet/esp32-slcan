@@ -6,7 +6,7 @@
 #include <Adafruit_SSD1306.h>   // v1.1.2     from https://github.com/adafruit/Adafruit_SSD1306
 #include "BluetoothSerial.h"    // v1.0
 
-// CURRENTLY WEMOS LOLIN32
+// CURRENTLY ESP32 Dev Module Board Definition
 // PIN 4  CANTX to transceiver
 // PIN 5  CANRX to transceiver
 // PIN 12 BLUETOOTH SWITCH
@@ -17,18 +17,19 @@
 // 3.3v to SSD1306 & CAN transceiver
 // GND to SSD1306 & CAN transceiver
 
-CAN_device_t CAN_cfg;
-Adafruit_SSD1306 display(2);
-BluetoothSerial SerialBT;
+CAN_device_t              CAN_cfg;
+Adafruit_SSD1306          display(2);
+BluetoothSerial           SerialBT;
 
-boolean working = false;
-boolean bluetooth = false;
-boolean timestamp = false;
-int can_speed = 500;
-int ser_speed = 500000;
+boolean working           = false;
+boolean bluetooth         = false;
+boolean timestamp         = false;
+boolean cr                = false;
+int can_speed             = 500;
+int ser_speed             = 500000;
 
-const int SWITCH_PIN_A = 12;
-//const int SWITCH_PIN_B = 14;
+const int SWITCH_PIN_A    = 12;
+//const int SWITCH_PIN_B  = 14;
 
 static uint8_t hexval[17] = "0123456789ABCDEF";
 
@@ -120,19 +121,19 @@ void pars_slcancmd(char *buf)
       print_status();
       slcan_ack();
       break;
-    case 't':               // send std frame
+    case 't':               // SEND STD FRAME
       send_canmsg(buf,false,false);
       slcan_ack();
       break;
-    case 'T':               // send ext frame
+    case 'T':               // SEND EXT FRAME
       send_canmsg(buf,false,true);
       slcan_ack();
       break;
-    case 'r':               // send std rtr frame
+    case 'r':               // SEND STD RTR FRAME
       send_canmsg(buf,true,false);
       slcan_ack();
       break;
-    case 'R':               // send ext rtr frame
+    case 'R':               // SEND EXT RTR FRAME
       send_canmsg(buf,true,true);
       slcan_ack();
       break;
@@ -168,40 +169,40 @@ void pars_slcancmd(char *buf)
         break;
       }
       switch (buf[1]) {
-        case '0': // 10k  
+        case '0':           // 10k  
           print_error(10);
           print_status();
           slcan_nack();
           break;
-        case '1': // 20k
+        case '1':           // 20k
           print_error(20);
           print_status();
           slcan_nack();
           break;
-        case '2': // 50k
+        case '2':           // 50k
           print_error(50);
           print_status();
           slcan_nack();
           break;
-        case '3': // 100k
+        case '3':           // 100k
           CAN_cfg.speed=CAN_SPEED_100KBPS;
           can_speed = 100;
           print_status();
           slcan_ack();
           break;
-        case '4': // 125k
+        case '4':           // 125k
           CAN_cfg.speed=CAN_SPEED_125KBPS;
           can_speed = 125;
           print_status();
           slcan_ack();
           break;
-        case '5': // 250k
+        case '5':           // 250k
           CAN_cfg.speed=CAN_SPEED_250KBPS;
           can_speed = 250;
           print_status();
          slcan_ack();
           break;
-        case '6': // 500k
+        case '6':           // 500k
           CAN_cfg.speed=CAN_SPEED_500KBPS;
           can_speed = 500;
           print_status();
@@ -213,7 +214,7 @@ void pars_slcancmd(char *buf)
           print_status();
           slcan_nack();
           break;
-        case '8': // 1000k
+        case '8':           // 1000k
           CAN_cfg.speed=CAN_SPEED_1000KBPS;
           can_speed = 1000;
           print_status();
@@ -238,6 +239,40 @@ void pars_slcancmd(char *buf)
       if (bluetooth) SerialBT.print("N2208");
       else Serial.print("N2208");
       slcan_ack();
+      break;
+    case 'l':               // (NOT SPEC) TOGGLE LINE FEED ON SERIAL
+      cr = !cr;
+      slcan_nack();
+      break;
+    case 'h':               // (NOT SPEC) HELP SERIAL
+      Serial.println();
+      Serial.println("mintynet.com - slcan esp32");
+      Serial.println();
+      Serial.println("O\t=\tStart slcan");
+      Serial.println("C\t=\tStop slcan");
+      Serial.println("t\t=\tSend std frame");
+      Serial.println("r\t=\tSend std rtr frame");
+      Serial.println("T\t=\tSend ext frame");
+      Serial.println("R\t=\tSend ext rtr frame");
+      Serial.println("Z0\t=\tTimestamp Off");
+      Serial.println("Z1\t=\tTimestamp On");
+      Serial.println("snn\t=\tSpeed 0xnnk N/A");
+      Serial.println("S0\t=\tSpeed 10k N/A");
+      Serial.println("S1\t=\tSpeed 20k N/A");
+      Serial.println("S2\t=\tSpeed 50k N/A");
+      Serial.println("S3\t=\tSpeed 100k");
+      Serial.println("S4\t=\tSpeed 125k");
+      Serial.println("S5\t=\tSpeed 250k");
+      Serial.println("S6\t=\tSpeed 500k");
+      Serial.println("S7\t=\tSpeed 800k");
+      Serial.println("S8\t=\tSpeed 1000k");
+      Serial.println("F\t=\tFlags N/A");
+      Serial.println("N\t=\tSerial No");
+      Serial.println("V\t=\tVersion");
+      Serial.println("-----NOT SPEC-----");
+      Serial.println("h\t=\tHelp");
+      Serial.println("l\t=\tToggle CR");
+      slcan_nack();
       break;
     default:
       slcan_nack();
@@ -341,6 +376,7 @@ void transfer_can2tty()
     command = command + '\r';
     if (bluetooth) SerialBT.print(command);
     else Serial.print(command);
+    if (cr) Serial.println("");
     }
   }
 } // transfer_can2tty()
@@ -368,9 +404,11 @@ void send_canmsg(char *buf, boolean rtr, boolean ext) {
     } else {
       if (ext) {
         sscanf(&buf[1], "%04x%04x", &msg_ide, &msg_id);
+        tx_frame.FIR.B.RTR = CAN_no_RTR;
         tx_frame.FIR.B.FF = CAN_frame_ext;
       } else {
         sscanf(&buf[1], "%03x", &msg_id);
+        tx_frame.FIR.B.RTR = CAN_no_RTR;
         tx_frame.FIR.B.FF = CAN_frame_std;
       }
     }
