@@ -2,7 +2,7 @@
 #include <CAN_config.h>         // as above
 #include <SPI.h>                // v1.0
 #include <Wire.h>               // v1.0
-#include <Adafruit_GFX.h>       // v1.2.2     from https://github.com/adafruit/Adafruit-GFX-Library
+#include <Adafruit_GFX.h>       // v1.2.7     from https://github.com/adafruit/Adafruit-GFX-Library
 #include <Adafruit_SSD1306.h>   // v1.1.2     from https://github.com/adafruit/Adafruit_SSD1306
 #include "BluetoothSerial.h"    // v1.0
 
