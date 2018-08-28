@@ -7,15 +7,15 @@
 #include "BluetoothSerial.h"    // v1.0
 
 // CURRENTLY ESP32 Dev Module Board Definition
-// PIN 4  CANTX to transceiver
-// PIN 5  CANRX to transceiver
+// PIN 4  CANTX to WAVESHARE CAN transceiver
+// PIN 5  CANRX to WAVESHARE CAN transceiver
 // PIN 12 BLUETOOTH SWITCH
 // PIN 14 NOT IN USE
 // PIN 15 10k to ground to remove boot messages
 // PIN 21 SDA (4.7k to 5v) for SSD1306
 // PIN 22 SCL (4.7k to 5v) for SSD1306
-// 3.3v to SSD1306 & CAN transceiver
-// GND to SSD1306 & CAN transceiver
+// 3.3v to SSD1306 & WAVESHARE CAN transceiver
+// GND to SWITCH CENTER, SSD1306 & WAVESHARE CAN transceiver
 
 CAN_device_t              CAN_cfg;
 Adafruit_SSD1306          display(2);
@@ -445,12 +445,11 @@ void setup() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
   Serial.begin(ser_speed);
   delay(100);
-  //Serial.println("esp32can-test:iotsharing.com CAN demo");
+  //Serial.println("CAN demo");
   CAN_cfg.speed=CAN_SPEED_500KBPS;
   CAN_cfg.tx_pin_id = GPIO_NUM_4;
   CAN_cfg.rx_pin_id = GPIO_NUM_5;
   CAN_cfg.rx_queue = xQueueCreate(10,sizeof(CAN_frame_t));
-  //display.display();
   display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(15,10);
