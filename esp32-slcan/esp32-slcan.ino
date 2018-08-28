@@ -461,8 +461,10 @@ void setup() {
   if (!switchA) {
     SerialBT.begin("SLCAN");
     bluetooth = true;
+    Serial.println("BT Switch ON");
   } else {
     bluetooth = false;
+    Serial.println("BT Switch OFF");
   }
   if (bluetooth) Serial.println("BLUETOOTH ON");
   print_status();
