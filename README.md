@@ -8,7 +8,11 @@ This repository has an arduino sketch to create a slcan USB/Bluetooth device usi
 Current "ESP32 ESP-WROOM-32 Wemos D1" uses CP2102 USB to TTL which is limited to 500kbps
 Schematic for the device to follow
 
-![Outside](outside.jpg)
+Can PCB without screen
 ![Can pcb](can-pcb.jpg)
+Original with screen
+![Outside](outside.jpg)
+Inside original a
 ![Inside above](inside_above.jpg)
+Inside original b
 ![Inside under](inside_under.jpg)
