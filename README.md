@@ -9,5 +9,6 @@ Current "ESP32 ESP-WROOM-32 Wemos D1" uses CP2102 USB to TTL which is limited to
 Schematic for the device to follow
 
 ![Outside](outside.jpg)
+![Can pcb](can-pcb.jpg)
 ![Inside above](inside_above.jpg)
 ![Inside under](inside_under.jpg)
