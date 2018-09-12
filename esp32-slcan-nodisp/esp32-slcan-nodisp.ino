@@ -1,9 +1,5 @@
 #include <ESP32CAN.h>           // v1.0.0     from https://github.com/nhatuan84/arduino-esp32-can-demo
 #include <CAN_config.h>         // as above
-#include <SPI.h>                // v1.0
-#include <Wire.h>               // v1.0
-#include <Adafruit_GFX.h>       // v1.2.7     from https://github.com/adafruit/Adafruit-GFX-Library
-#include <Adafruit_SSD1306.h>   // v1.1.2     from https://github.com/adafruit/Adafruit_SSD1306
 #include "BluetoothSerial.h"    // v1.0
 
 // CURRENTLY ESP32 Dev Module Board Definition
@@ -18,7 +14,6 @@
 // GND to SWITCH CENTER, SSD1306 & WAVESHARE CAN transceiver
 
 CAN_device_t              CAN_cfg;
-Adafruit_SSD1306          display(2);
 BluetoothSerial           SerialBT;
 
 boolean working           = false;
@@ -32,61 +27,6 @@ const int SWITCH_PIN_A    = 12;
 //const int SWITCH_PIN_B  = 14;
 
 static uint8_t hexval[17] = "0123456789ABCDEF";
-
-//----------------------------------------------------------------
-
-void print_error(int canspeed) {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setCursor(0,0);
-  display.setTextColor(BLACK, WHITE);
-  display.print("mintynet.com slcan");
-  if (bluetooth) display.println(" B");
-  else display.println();
-  display.setTextColor(WHITE, BLACK);
-  if (canspeed > 0) {
-    display.println(" NOT AVAILABLE");
-    display.print("  ser: ");
-    display.print(ser_speed/1000);
-    display.print("kbps");
-    if (timestamp) { display.println("    T"); } else { display.println(""); }
-    display.print("  can: ");
-    display.print(canspeed);
-    display.print("kbps");
-    if (working) { display.println("   ON"); } else { display.println("   OFF"); }
-  } else if (canspeed == -1) {
-    display.println();
-    display.println("  STOP FIRST");  
-  } else {
-    display.println();
-    display.println("  CANNOT SEND");
-  }
-  display.display();
-  delay(2500);
-} //print_error()
-
-//----------------------------------------------------------------
-
-void print_status() {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setCursor(0,0);
-  display.setTextColor(BLACK, WHITE);
-  display.setCursor(0,0);
-  display.print("mintynet.com slcan");
-  if (bluetooth) display.println(" B");
-  else display.println();
-  display.setTextColor(WHITE, BLACK);
-  display.print("  ser: ");
-  display.print(ser_speed/1000);
-  display.print("kbps");
-  if (timestamp) { display.println("    T"); } else { display.println(""); }
-  display.print("  can: ");
-  display.print(can_speed);
-  display.print("kbps");
-  if (working) { display.println("   ON"); } else { display.println("   OFF"); }
-  display.display();
-} //print_status()
 
 //----------------------------------------------------------------
 
@@ -112,13 +52,11 @@ void pars_slcancmd(char *buf)
     case 'O':               // OPEN CAN
       working=true;
       ESP32Can.CANInit();
-      print_status();
       slcan_ack();
       break;
     case 'C':               // CLOSE CAN
       working=false;
       ESP32Can.CANStop();
-      print_status();
       slcan_ack();
       break;
     case 't':               // SEND STD FRAME
@@ -141,12 +79,10 @@ void pars_slcancmd(char *buf)
       switch (buf[1]) {
         case '0':           // TIMESTAMP OFF  
           timestamp = false;
-          print_status();
           slcan_ack();
           break;
         case '1':           // TIMESTAMP ON
           timestamp = true;
-          print_status();
           slcan_ack();
           break;
         default:
@@ -163,61 +99,44 @@ void pars_slcancmd(char *buf)
       slcan_nack();
       break;
     case 'S':               // CAN bit-rate
-      if (working) {
-        print_error(-1);
-        print_status();
-        break;
-      }
       switch (buf[1]) {
         case '0':           // 10k  
-          print_error(10);
-          print_status();
           slcan_nack();
           break;
         case '1':           // 20k
-          print_error(20);
-          print_status();
           slcan_nack();
           break;
         case '2':           // 50k
-          print_error(50);
-          print_status();
           slcan_nack();
           break;
         case '3':           // 100k
           CAN_cfg.speed=CAN_SPEED_100KBPS;
           can_speed = 100;
-          print_status();
           slcan_ack();
           break;
         case '4':           // 125k
           CAN_cfg.speed=CAN_SPEED_125KBPS;
           can_speed = 125;
-          print_status();
           slcan_ack();
           break;
         case '5':           // 250k
           CAN_cfg.speed=CAN_SPEED_250KBPS;
           can_speed = 250;
-          print_status();
          slcan_ack();
           break;
         case '6':           // 500k
           CAN_cfg.speed=CAN_SPEED_500KBPS;
           can_speed = 500;
-          print_status();
           slcan_ack();
           break;
         case '7': // 800k
           CAN_cfg.speed=CAN_SPEED_800KBPS;
           can_speed = 800;
-          print_status();
           slcan_nack();
           break;
         case '8':           // 1000k
           CAN_cfg.speed=CAN_SPEED_1000KBPS;
           can_speed = 1000;
-          print_status();
           slcan_ack();
           break;
         default:
@@ -423,8 +342,7 @@ void transfer_can2tty()
 
 void send_canmsg(char *buf, boolean rtr, boolean ext) {
   if (!working) {
-    print_error(0);
-    print_status();
+
   } else {
     CAN_frame_t tx_frame;
     int msg_id = 0;
@@ -480,20 +398,13 @@ void setup() {
   //Wire.begin(21,22);
   pinMode(SWITCH_PIN_A,INPUT_PULLUP);
   //pinMode(SWITCH_PIN_B,INPUT_PULLUP);
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
   Serial.begin(ser_speed);
   delay(100);
   //Serial.println("CAN demo");
   CAN_cfg.speed=CAN_SPEED_500KBPS;
-  CAN_cfg.tx_pin_id = GPIO_NUM_5;
-  CAN_cfg.rx_pin_id = GPIO_NUM_4;
+  CAN_cfg.tx_pin_id = GPIO_NUM_4;
+  CAN_cfg.rx_pin_id = GPIO_NUM_5;
   CAN_cfg.rx_queue = xQueueCreate(10,sizeof(CAN_frame_t));
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(15,10);
-  display.clearDisplay();
-  display.println("mintynet");
-  display.display();
   delay(2000);
   boolean switchA = digitalRead(SWITCH_PIN_A);
   if (!switchA) {
@@ -505,7 +416,6 @@ void setup() {
     Serial.println("BT Switch OFF");
   }
   if (bluetooth) Serial.println("BLUETOOTH ON");
-  print_status();
 } // setup()
 
 //----------------------------------------------------------------
