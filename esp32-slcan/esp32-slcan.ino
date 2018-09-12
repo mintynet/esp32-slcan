@@ -271,7 +271,45 @@ void pars_slcancmd(char *buf)
       Serial.println("V\t=\tVersion");
       Serial.println("-----NOT SPEC-----");
       Serial.println("h\t=\tHelp");
-      Serial.println("l\t=\tToggle CR");
+      Serial.print("l\t=\tToggle CR ");
+      if (cr) {
+        Serial.println("ON");
+      } else {
+        Serial.println("OFF");
+      }
+      Serial.print("CAN_SPEED:\t");
+      switch(can_speed) {
+        case 100:
+          Serial.print("100");
+          break;
+        case 125:
+          Serial.print("125");
+          break;
+        case 250:
+          Serial.print("250");
+          break;
+        case 500:
+          Serial.print("500");
+          break;
+        case 800:
+          Serial.print("800");
+          break;
+        case 1000:
+          Serial.print("1000");
+          break;
+        default:
+          break;
+      }
+      Serial.print("kbps");
+      if (timestamp) {
+        Serial.print("\tT");
+      }
+      if (working) {
+        Serial.print("\tON");
+      } else {
+        Serial.print("\tOFF");
+      }
+      Serial.println();
       slcan_nack();
       break;
     default:
@@ -447,8 +485,8 @@ void setup() {
   delay(100);
   //Serial.println("CAN demo");
   CAN_cfg.speed=CAN_SPEED_500KBPS;
-  CAN_cfg.tx_pin_id = GPIO_NUM_4;
-  CAN_cfg.rx_pin_id = GPIO_NUM_5;
+  CAN_cfg.tx_pin_id = GPIO_NUM_5;
+  CAN_cfg.rx_pin_id = GPIO_NUM_4;
   CAN_cfg.rx_queue = xQueueCreate(10,sizeof(CAN_frame_t));
   display.setTextSize(2);
   display.setTextColor(WHITE);
