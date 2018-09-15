@@ -3,15 +3,13 @@
 #include "BluetoothSerial.h"    // v1.0
 
 // CURRENTLY ESP32 Dev Module Board Definition
-// PIN 4  CANTX to WAVESHARE CAN transceiver
-// PIN 5  CANRX to WAVESHARE CAN transceiver
+// PIN 4  CANTX 
+// PIN 5  CANRX 
 // PIN 12 BLUETOOTH SWITCH
 // PIN 14 NOT IN USE
 // PIN 15 10k to ground to remove boot messages
-// PIN 21 SDA (4.7k to 5v) for SSD1306
-// PIN 22 SCL (4.7k to 5v) for SSD1306
-// 3.3v to SSD1306 & WAVESHARE CAN transceiver
-// GND to SWITCH CENTER, SSD1306 & WAVESHARE CAN transceiver
+// 3.3v 
+// GND to SWITCH CENTER
 
 CAN_device_t              CAN_cfg;
 BluetoothSerial           SerialBT;
