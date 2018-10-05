@@ -494,9 +494,9 @@ void disp_msg_cnt() {
     if (bluetooth) display.println(" B");
     else display.println();
     display.setTextColor(WHITE, BLACK);
-    display.print(" cnt  in: ");
+    display.print("  cnt  in: ");
     display.println(msg_cnt_in);
-    display.print(" cnt out: ");
+    display.print("  cnt out: ");
     display.println(msg_cnt_out);
     display.display();
     disp_cnt = true;
@@ -513,6 +513,7 @@ void setup() {
   pinMode(SWITCH_PIN_A,INPUT_PULLUP);
   pinMode(SWITCH_PIN_B,INPUT_PULLUP);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
+  display.setRotation(2);
   Serial.begin(ser_speed);
   delay(100);
   //Serial.println("CAN demo");
