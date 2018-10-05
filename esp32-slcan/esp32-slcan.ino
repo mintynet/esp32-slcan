@@ -25,11 +25,14 @@ boolean working           = false;
 boolean bluetooth         = false;
 boolean timestamp         = false;
 boolean cr                = false;
+boolean disp_cnt          = false;
 int can_speed             = 500;
 int ser_speed             = 500000;
+int msg_cnt_in            = 0;
+int msg_cnt_out           = 0;
 
 const int SWITCH_PIN_A    = 12;
-//const int SWITCH_PIN_B  = 14;
+const int SWITCH_PIN_B    = 14;
 
 static uint8_t hexval[17] = "0123456789ABCDEF";
 
@@ -112,6 +115,8 @@ void pars_slcancmd(char *buf)
     case 'O':               // OPEN CAN
       working=true;
       ESP32Can.CANInit();
+      msg_cnt_in = 0;
+      msg_cnt_out = 0;
       print_status();
       slcan_ack();
       break;
@@ -416,6 +421,7 @@ void transfer_can2tty()
     else Serial.print(command);
     if (cr) Serial.println("");
     }
+    msg_cnt_in++;
   }
 } // transfer_can2tty()
 
@@ -471,15 +477,41 @@ void send_canmsg(char *buf, boolean rtr, boolean ext) {
       }
     }
     ESP32Can.CANWriteFrame(&tx_frame);
+    msg_cnt_out++;
   }
 } // send_canmsg()
+
+//----------------------------------------------------------------
+
+void disp_msg_cnt() {
+  boolean switchB = digitalRead(SWITCH_PIN_B);
+  if (!switchB) {
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setCursor(0,0);
+    display.setTextColor(BLACK, WHITE);
+    display.print("mintynet.com slcan");
+    if (bluetooth) display.println(" B");
+    else display.println();
+    display.setTextColor(WHITE, BLACK);
+    display.print(" cnt  in: ");
+    display.println(msg_cnt_in);
+    display.print(" cnt out: ");
+    display.println(msg_cnt_out);
+    display.display();
+    disp_cnt = true;
+  } else if (disp_cnt) {
+    print_status();
+    disp_cnt = false;
+  }
+} //disp-msg-cnt()
 
 //----------------------------------------------------------------
 
 void setup() {
   //Wire.begin(21,22);
   pinMode(SWITCH_PIN_A,INPUT_PULLUP);
-  //pinMode(SWITCH_PIN_B,INPUT_PULLUP);
+  pinMode(SWITCH_PIN_B,INPUT_PULLUP);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
   Serial.begin(ser_speed);
   delay(100);
@@ -513,4 +545,5 @@ void setup() {
 void loop() {
   transfer_can2tty();
   transfer_tty2can();
+  disp_msg_cnt();
 } // loop();
