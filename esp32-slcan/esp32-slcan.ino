@@ -9,8 +9,8 @@
 // CURRENTLY ESP32 Dev Module Board Definition
 // PIN 4  CANTX to WAVESHARE CAN transceiver
 // PIN 5  CANRX to WAVESHARE CAN transceiver
-// PIN 12 BLUETOOTH SWITCH
-// PIN 14 NOT IN USE
+// PIN 12 BLUETOOTH SWITCH outer pin
+// PIN 14 USED FOR SWITCH outer pin TO SHOW MSG COUNTER
 // PIN 15 10k to ground to remove boot messages
 // PIN 21 SDA (4.7k to 5v) for SSD1306
 // PIN 22 SCL (4.7k to 5v) for SSD1306
