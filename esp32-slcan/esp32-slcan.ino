@@ -18,7 +18,7 @@
 // GND to SWITCH CENTER, SSD1306 & WAVESHARE CAN transceiver
 
 CAN_device_t              CAN_cfg;
-Adafruit_SSD1306          display(2);
+Adafruit_SSD1306          display(-1);
 BluetoothSerial           SerialBT;
 
 boolean working           = false;
@@ -509,9 +509,10 @@ void disp_msg_cnt() {
 //----------------------------------------------------------------
 
 void setup() {
-  //Wire.begin(21,22);
+  Wire.begin(21,22);
   pinMode(SWITCH_PIN_A,INPUT_PULLUP);
   pinMode(SWITCH_PIN_B,INPUT_PULLUP);
+  delay(3000);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
   display.setRotation(2);
   Serial.begin(ser_speed);
