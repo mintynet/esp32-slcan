@@ -130,7 +130,7 @@ void pars_slcancmd(char *buf)
         case '7': // 800k
           CAN_cfg.speed=CAN_SPEED_800KBPS;
           can_speed = 800;
-          slcan_nack();
+          slcan_ack();
           break;
         case '8':           // 1000k
           CAN_cfg.speed=CAN_SPEED_1000KBPS;

@@ -217,7 +217,7 @@ void pars_slcancmd(char *buf)
           CAN_cfg.speed=CAN_SPEED_800KBPS;
           can_speed = 800;
           print_status();
-          slcan_nack();
+          slcan_ack();
           break;
         case '8':           // 1000k
           CAN_cfg.speed=CAN_SPEED_1000KBPS;
@@ -509,7 +509,7 @@ void disp_msg_cnt() {
 //----------------------------------------------------------------
 
 void setup() {
-  Wire.begin(21,22);
+  //Wire.begin(21,22);
   pinMode(SWITCH_PIN_A,INPUT_PULLUP);
   pinMode(SWITCH_PIN_B,INPUT_PULLUP);
   delay(3000);
