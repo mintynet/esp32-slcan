@@ -1,0 +1,33 @@
+ODB2 16 pin connector
+
+https://www.aliexpress.com/item/2017-Newst-OBD-Male-Plug-OBD2-16Pin-Connector-OBDII-Adaptor-OBDII-Connector-J1962-OBD2-Connector-in/32788754944.html
+
+SN65HVD230 CAN transceiver
+
+https://www.aliexpress.com/item/10PCS-free-shipping-100-new-original-VP230-SN65HVD230-SN65HVD230DR-supply-from-stock/1697873512.html
+
+0805 10k resistors
+
+https://www.aliexpress.com/item/100Pcs-0805-SMD-1-4W-chip-resistor-0R-10M-0-10R-100R-220R-330R-470R-1K/32847143167.html
+
+0805 120 resistors (only required if you need to have the terminator resistor)
+
+https://www.aliexpress.com/item/100Pcs-0805-SMD-1-4W-chip-resistor-0R-10M-0-10R-100R-220R-330R-470R-1K/32847143167.html
+
+ESP32 board
+
+https://www.ebay.co.uk/itm/ESP32-ESP-WROOM-32-Wemos-D1-ESP8266-WIFI-BT-2-4GHz-Dual-Mode-Develope-Board/201906374007?hash=item2f028ec577:g:W~oAAOSwjOxaywHx:rk:15:pf:0
+
+SPDT momentary switch 
+
+no link
+
+SSD1306 128x32 screen (connected to 3.3v, GND, 21 SDA & 22 SCL)
+
+https://www.aliexpress.com/item/0-91-inch-128x32-I2C-IIC-Serial-Blue-OLED-LCD-Display-Module-0-91-12832-SSD1306/32800096058.html
+
+
+=========================================================================================
+
+All the links are from previous purchases. Any problems let me know.
+
