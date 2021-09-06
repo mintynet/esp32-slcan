@@ -384,7 +384,7 @@ void transfer_can2tty()
         } else {
           command = command + "T";
         }
-        command = command + char(hexval[ (rx_frame.MsgID>>28)&15]);
+        command = command + char(hexval[ (rx_frame.MsgID>>28)&1]);
         command = command + char(hexval[ (rx_frame.MsgID>>24)&15]);
         command = command + char(hexval[ (rx_frame.MsgID>>20)&15]);
         command = command + char(hexval[ (rx_frame.MsgID>>16)&15]);
