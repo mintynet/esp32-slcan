@@ -301,7 +301,7 @@ void transfer_can2tty()
   String command = "";
   long time_now = 0;
   //receive next CAN frame from queue
-  uint32_t result = twai_receive(&rx_frame,100);
+  uint32_t result = twai_receive(&rx_frame,1);
   if(result==ESP_OK) {
     //do stuff!
     if(working) {
@@ -400,7 +400,7 @@ void send_canmsg(char *buf, boolean rtr, boolean ext) {
         tx_frame.data[i] = candata;
       }
     }
-    twai_transmit(&tx_frame,0);
+    twai_transmit(&tx_frame,1);
   }
 } // send_canmsg()
 
@@ -420,3 +420,4 @@ void loop() {
   }
   transfer_tty2can();
 } // loop();
+
