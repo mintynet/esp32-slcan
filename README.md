@@ -1,4 +1,5 @@
-# esp32-slcan
+# esp32-slcan & esp32-slcan-nodisp
+# THIS IS FOR Board Definition 2.x
 This repository has an arduino sketch to create a slcan USB/Bluetooth device using the ESP32, SN65HVD230 CAN transceiver and 128x32 SSD1306.
 <br>Requires the use of the following Arduino libraries
 <br><br>https://github.com/nhatuan84/arduino-esp32-can-demo
@@ -20,3 +21,10 @@ Inside original a
 ![Inside above](inside_above.jpg)
 Inside original b
 ![Inside under](inside_under.jpg)
+
+# esp32-twai-can
+# THIS IS FOR Board Definition > 3.x
+This folder has the new TWAI based slcan software, this is tested on an ESP32-S3, SN65HVD230 CAN transceiver
+<br>This does NOT require any additional libraries
+<br>
+<br>JAN2026 this DOES NOT work with ESP32-C3 variant, it comes up correctly but does NOT TX/RX any CAN traffic.
