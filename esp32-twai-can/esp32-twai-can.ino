@@ -48,7 +48,7 @@ void pars_slcancmd(char *buf)
   switch (buf[0]) {
     case 'O':               // OPEN CAN
       if (!working) {
-        g_config = TWAI_GENERAL_CONFIG_DEFAULT((gpio_num_t)CAN_TX, (gpio_num_t)CAN_RX, TWAI_MODE_NO_ACK);  // TWAI_MODE_NORMAL, TWAI_MODE_NO_ACK, TWAI_MODE_LISTEN_ONLY
+        g_config = TWAI_GENERAL_CONFIG_DEFAULT((gpio_num_t)CAN_TX, (gpio_num_t)CAN_RX, TWAI_MODE_NORMAL);  // TWAI_MODE_NORMAL, TWAI_MODE_NO_ACK, TWAI_MODE_LISTEN_ONLY
         f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
         if(twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK) {
           if (twai_start() != ESP_OK) {
@@ -420,4 +420,5 @@ void loop() {
   }
   transfer_tty2can();
 } // loop();
+
 
