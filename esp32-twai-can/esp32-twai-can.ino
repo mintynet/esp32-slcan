@@ -121,18 +121,18 @@ void pars_slcancmd(char *buf)
       switch (buf[1]) {
         case '0':           // 10k  
           can_speed = 10;
-          //t_config = TWAI_TIMING_CONFIG_10KBITS();
-          slcan_nack();
+          t_config = TWAI_TIMING_CONFIG_10KBITS();
+          slcan_ack();
           break;
         case '1':           // 20k
           can_speed = 20;
-          //t_config = TWAI_TIMING_CONFIG_20KBITS();
-          slcan_nack();
+          t_config = TWAI_TIMING_CONFIG_20KBITS();
+          slcan_ack();
           break;
         case '2':           // 50k
           can_speed = 50;
           t_config = TWAI_TIMING_CONFIG_50KBITS();
-          slcan_nack();
+          slcan_ack();
           break;
         case '3':           // 100k
           can_speed = 100;
@@ -200,7 +200,7 @@ void pars_slcancmd(char *buf)
       Serial.println("snn\t=\tSpeed 0xnnk N/A");
       Serial.println("S0\t=\tSpeed 10k");
       Serial.println("S1\t=\tSpeed 20k");
-      Serial.println("S2\t=\tSpeed 50k N/A");
+      Serial.println("S2\t=\tSpeed 50k");
       Serial.println("S3\t=\tSpeed 100k");
       Serial.println("S4\t=\tSpeed 125k");
       Serial.println("S5\t=\tSpeed 250k");
@@ -409,7 +409,8 @@ void send_canmsg(char *buf, boolean rtr, boolean ext) {
 void setup() {
   Serial.begin(ser_speed);
   while(!Serial);
-  delay(2000);
+  t_config = TWAI_TIMING_CONFIG_500KBITS();
+  delay(1000);
 } // setup()
 
 //----------------------------------------------------------------
@@ -420,5 +421,6 @@ void loop() {
   }
   transfer_tty2can();
 } // loop();
+
 
 
