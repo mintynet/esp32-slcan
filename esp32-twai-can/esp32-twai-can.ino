@@ -121,13 +121,21 @@ void pars_slcancmd(char *buf)
       switch (buf[1]) {
         case '0':           // 10k  
           can_speed = 10;
-          t_config = TWAI_TIMING_CONFIG_10KBITS();
-          slcan_ack();
+          #if defined(CONFIG_IDF_TARGET_ESP32S3)
+            t_config = TWAI_TIMING_CONFIG_10KBITS();
+            slcan_ack();
+          #else
+            slcan_nack();
+          #endif
           break;
         case '1':           // 20k
           can_speed = 20;
-          t_config = TWAI_TIMING_CONFIG_20KBITS();
-          slcan_ack();
+          #if defined(CONFIG_IDF_TARGET_ESP32S3)
+            t_config = TWAI_TIMING_CONFIG_20KBITS();
+            slcan_ack();
+          #else
+            slcan_nack();
+          #endif
           break;
         case '2':           // 50k
           can_speed = 50;
@@ -198,8 +206,13 @@ void pars_slcancmd(char *buf)
       Serial.println("Z0\t=\tTimestamp Off");
       Serial.println("Z1\t=\tTimestamp On");
       Serial.println("snn\t=\tSpeed 0xnnk N/A");
-      Serial.println("S0\t=\tSpeed 10k");
-      Serial.println("S1\t=\tSpeed 20k");
+      #if defined(CONFIG_IDF_TARGET_ESP32S3)
+        Serial.println("S0\t=\tSpeed 10k");
+        Serial.println("S1\t=\tSpeed 20k");
+      #else
+        Serial.println("S0\t=\tSpeed 10k N/A");
+        Serial.println("S1\t=\tSpeed 20k N/A");
+      #endif
       Serial.println("S2\t=\tSpeed 50k");
       Serial.println("S3\t=\tSpeed 100k");
       Serial.println("S4\t=\tSpeed 125k");
@@ -421,6 +434,3 @@ void loop() {
   }
   transfer_tty2can();
 } // loop();
-
-
-
